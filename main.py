@@ -1,6 +1,12 @@
 #main menu and mode selection.
 #Distance, speed, and time:
-from calculations import calculate_distance, calculate_speed, calculate_time
+from calculations import (
+    calculate_distance,
+    calculate_speed,
+    calculate_time,
+    calculate_scaled_distance
+)
+
 
 def quick_mode():
     while True:
@@ -8,56 +14,64 @@ def quick_mode():
         print("1. Calculate Distance")
         print("2. Calculate Speed")
         print("3. Calculate Time")
-        print("4. Return to Main Menu")
+        print("4. Solar System Scale Calculator")
+        print("5. Exit")
 
-        choice = input("\nWhat would you like to calculate? ")
+        choice = input("\nChoose an option: ")
 
         if choice == "1":
-            try:
-                speed = float(input("Enter speed (km/s): "))
-                time = float(input("Enter time (seconds): "))
-
-                distance = calculate_distance(speed, time)
-                print(f"\nDistance: {distance:,.2f} km")
-
-            except ValueError:
-                print("Please enter valid numbers.")
+            speed = float(input("Enter speed (km/s): "))
+            time = float(input("Enter time (seconds): "))
+            print(f"Distance: {calculate_distance(speed, time):,.2f} km")
 
         elif choice == "2":
-            try:
-                distance = float(input("Enter distance (km): "))
-                time = float(input("Enter time (seconds): "))
+            distance = float(input("Enter distance (km): "))
+            time = float(input("Enter time (seconds): "))
 
-                if time == 0:
-                    print("Time cannot be zero.")
-                else:
-                    speed = calculate_speed(distance, time)
-                    print(f"\nSpeed: {speed:,.2f} km/s")
-
-            except ValueError:
-                print("Please enter valid numbers.")
+            if time == 0:
+                print("Time cannot be zero.")
+            else:
+                print(f"Speed: {calculate_speed(distance, time):,.2f} km/s")
 
         elif choice == "3":
-            try:
-                distance = float(input("Enter distance (km): "))
-                speed = float(input("Enter speed (km/s): "))
+            distance = float(input("Enter distance (km): "))
+            speed = float(input("Enter speed (km/s): "))
 
-                if speed == 0:
-                    print("Speed cannot be zero.")
-                else:
-                    time = calculate_time(distance, speed)
-                    print(f"\nTime: {time:,.2f} seconds")
-                    print(f"Time: {time / 60:,.2f} minutes")
-
-            except ValueError:
-                print("Please enter valid numbers.")
+            if speed == 0:
+                print("Speed cannot be zero.")
+            else:
+                print(f"Time: {calculate_time(distance, speed):,.2f} seconds")
 
         elif choice == "4":
-            print("Returning to the main menu.")
+            strip_length = float(input("Enter strip length (cm): "))
+
+            print("\nSolar System Scaled Distances")
+
+            objects = {
+                "Mercury": 5.83e7,
+                "Venus": 1.08e8,
+                "Earth": 1.50e8,
+                "Mars": 2.27e8,
+                "Asteroid Belt (inner edge)": 3.28e8,
+                "Asteroid Belt (outer edge)": 4.77e8,
+                "Jupiter": 7.78e8,
+                "Saturn": 1.43e9,
+                "Uranus": 2.87e9,
+                "Neptune": 4.50e9,
+                "Pluto": 5.91e9
+            }
+
+            for name, distance in objects.items():
+                scaled = calculate_scaled_distance(distance, strip_length)
+                print(f"{name:30} {scaled:8.2f} cm")
+
+        elif choice == "5":
+            print("Thank you for using AstroCalc!")
             break
 
         else:
-            print("Invalid selection. Please choose 1, 2, 3, or 4.")
+            print("Please choose a valid option.")
 
 
-quick_mode()
+if __name__ == "__main__":
+    quick_mode()
